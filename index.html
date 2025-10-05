@@ -1,0 +1,779 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Món quà trung thu cho Thanh Zy 🎐</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        height: 100%;
+        background: linear-gradient(to bottom, #001f3f 0%, #000814 100%);
+        overflow: hidden;
+        font-family: "Segoe UI", sans-serif;
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      .scene {
+        width: 100%;
+        height: 100%;
+        perspective: 1200px;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .scene.start {
+        animation: sceneZoom 2s ease forwards;
+      }
+      @keyframes sceneZoom {
+        0% {
+          transform: scale(0.9);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .moon {
+        position: fixed;
+        top: 4%;
+        right: 4%;
+        width: 140px;
+        height: 140px;
+        background: radial-gradient(
+          circle,
+          #fffbe8 0%,
+          #f7e7a8 40%,
+          #e5d37a 70%,
+          transparent 100%
+        );
+        border-radius: 50%;
+        box-shadow: 0 0 20px 10px rgba(255, 250, 220, 0.7),
+          0 0 40px 20px rgba(255, 250, 220, 0.5);
+        animation: moonGlow 4s ease-in-out infinite;
+        z-index: 1;
+        pointer-events: none;
+      }
+      @keyframes moonGlow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px 10px rgba(255, 250, 220, 0.7),
+            0 0 40px 20px rgba(255, 250, 220, 0.5);
+        }
+        50% {
+          box-shadow: 0 0 30px 15px rgba(255, 250, 220, 0.8),
+            0 0 60px 25px rgba(255, 250, 220, 0.6);
+        }
+      }
+
+      .star {
+        position: absolute;
+        background: white;
+        border-radius: 50%;
+        opacity: 0.8;
+        animation: twinkle 2s infinite ease-in-out;
+        z-index: 0;
+        pointer-events: none;
+      }
+      @keyframes twinkle {
+        0%,
+        100% {
+          opacity: 0.3;
+        }
+        50% {
+          opacity: 1;
+        }
+      }
+
+      .lantern-container {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        transform-style: preserve-3d;
+        transform: translateZ(-800px);
+        z-index: 2;
+        transition: transform 1s cubic-bezier(0.22, 0.9, 0.35, 1);
+      }
+
+      .lantern-wrapper {
+        position: absolute;
+        transform-style: preserve-3d; /* keep pointer-events none so clicks go to img/lantern */
+        pointer-events: none;
+      }
+
+      .lantern {
+        width: 400px;
+        height: auto;
+        position: relative;
+        animation: floatUp linear infinite;
+        transform-origin: center bottom;
+        cursor: pointer;
+        transition: transform 0.4s ease, box-shadow 0.4s ease;
+        pointer-events: none;
+        backface-visibility: hidden;
+        animation-play-state: running;
+        will-change: transform, opacity;
+        filter: drop-shadow(0 0 6px rgba(255, 220, 180, 0.7))
+          drop-shadow(0 0 4px rgba(255, 200, 120, 0.5));
+      }
+
+      .lantern img {
+        width: 100%;
+        display: block;
+        pointer-events: auto;
+        user-select: none;
+        -webkit-user-drag: none;
+      }
+
+      .lantern,
+      .lantern * {
+        outline: none; /* tắt outline */
+        -webkit-tap-highlight-color: transparent; /* tắt highlight màu xanh trên mobile */
+        -moz-tap-highlight-color: transparent; /* Firefox Android */
+        -ms-tap-highlight-color: transparent; /* IE mobile */
+      }
+
+      @keyframes floatUp {
+        0% {
+          transform: translateY(0) translateX(0) rotateZ(0deg) rotateX(0deg);
+          opacity: 0;
+        }
+        10% {
+          opacity: 1;
+        }
+        50% {
+          transform: translateY(-50vh) translateX(20px) rotateZ(3deg)
+            rotateX(2deg);
+        }
+        70% {
+          transform: translateY(-70vh) translateX(-15px) rotateZ(-2deg)
+            rotateX(-1deg);
+        }
+        100% {
+          transform: translateY(-110vh) translateX(50px) rotateZ(5deg)
+            rotateX(3deg);
+          opacity: 0;
+        }
+      }
+
+      .hanger {
+        position: absolute;
+        bottom: 0;
+        left: 51%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .string {
+        width: 2px;
+        height: 50px;
+        background: #f5f5f5;
+      }
+      .frame {
+        width: 70px;
+        height: 70px;
+        background: #fff;
+        border: 2px solid #e0e0e0;
+        border-radius: 6px;
+        overflow: hidden;
+        box-shadow: 0 0 6px rgba(255, 255, 255, 0.4);
+        animation: swing 2.5s ease-in-out infinite alternate;
+        cursor: pointer;
+        margin-top: 0;
+      }
+      .frame img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+
+      @keyframes swing {
+        from {
+          transform: rotateZ(-6deg);
+        }
+        to {
+          transform: rotateZ(6deg);
+        }
+      }
+
+      /* --- Popup lời chúc --- */
+      .popup {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        visibility: hidden;
+        opacity: 0;
+        transition: all 0.35s ease;
+        z-index: 10010;
+      }
+
+      .popup.active {
+        visibility: visible;
+        opacity: 1;
+        background: rgba(0, 0, 0, 0.7);
+      }
+
+      .popup-content {
+        background: linear-gradient(145deg, #fff8e1, #ffe0b2);
+        color: #5d4037;
+        padding: 30px 40px;
+        border-radius: 20px;
+        text-align: center;
+        max-width: 400px;
+        box-shadow: 0 0 30px rgba(255, 223, 186, 0.8),
+          0 0 10px rgba(255, 255, 255, 0.6) inset;
+        animation: popupFadeIn 0.4s ease;
+        position: relative;
+      }
+
+      .popup-content h2 {
+        font-size: 24px;
+        margin-bottom: 12px;
+        color: #d17b00;
+        text-shadow: 0 0 6px rgba(255, 202, 40, 0.8);
+      }
+
+      .popup-content p {
+        font-size: 18px;
+        line-height: 1.5;
+        margin-bottom: 20px;
+      }
+
+      .popup-content button {
+        background: linear-gradient(to right, #ffb74d, #ff9800);
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 30px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .popup-content button:hover {
+        background: linear-gradient(to right, #ffa726, #f57c00);
+        transform: scale(1.05);
+      }
+
+      @keyframes popupFadeIn {
+        0% {
+          transform: scale(0.8);
+          opacity: 0;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* --- Popup hình ảnh --- */
+      .image-popup .popup-content {
+        background: transparent;
+        padding: 0;
+        box-shadow: none;
+        max-width: 90vw;
+        max-height: 85vh;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: popupFadeIn 0.4s ease;
+      }
+
+      .image-popup .popup-content img {
+        max-width: 90vw;
+        max-height: 75vh;
+        border-radius: 15px;
+        box-shadow: 0 0 25px rgba(255, 255, 255, 0.8);
+        margin-bottom: 15px;
+      }
+
+      .image-popup .popup-content button {
+        background: linear-gradient(to right, #ffb74d, #ff9800);
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 25px;
+        font-size: 15px;
+        cursor: pointer;
+        transition: background 0.3s ease, transform 0.2s ease;
+      }
+
+      .image-popup .popup-content button:hover {
+        background: linear-gradient(to right, #ffa726, #f57c00);
+        transform: scale(1.05);
+      }
+
+      .overlay {
+        position: fixed;
+        inset: 0;
+        background: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 20000;
+        transition: opacity 1s ease;
+      }
+      .overlay.hidden {
+        opacity: 0;
+        pointer-events: none;
+      }
+      .overlay-content {
+        text-align: center;
+        color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #overlay-text {
+        font-size: 28px;
+        margin-bottom: 30px;
+        color: #a0eaff;
+        text-shadow: 0 0 8px #00f0ff;
+        font-weight: 600;
+      }
+      #letgo-btn {
+        padding: 20px 40px;
+        font-size: 24px;
+        border: none;
+        border-radius: 15px;
+        background: linear-gradient(
+          to right,
+          #4facfe,
+          #00f2fe
+        ); /* xanh gradient */
+        color: white;
+        cursor: pointer;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      #letgo-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.6);
+      }
+      .countdown {
+        font-size: 100px;
+        color: white;
+        font-weight: bold;
+        animation: pop 0.8s ease;
+      }
+      @keyframes pop {
+        0% {
+          transform: scale(0);
+          opacity: 0;
+        }
+        50% {
+          transform: scale(1.3);
+          opacity: 1;
+        }
+        100% {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      /* dim khi popup active (separate element to avoid interfering with click detection) */
+      .modal-dim {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 10005;
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease;
+      }
+      .modal-dim.show {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      /* highlight selected */
+      .lantern.selected img {
+        filter: drop-shadow(0 0 18px gold) brightness(1.15);
+        transition: filter 0.25s ease;
+      }
+
+      #decor-bunny {
+        position: fixed;
+        right: 0;
+        bottom: 0;
+        width: 250px; /* lớn cho desktop */
+        max-width: 30vw; /* responsive */
+        height: auto;
+        z-index: 5000;
+        pointer-events: none;
+        user-select: none;
+        transition: transform 0.3s ease;
+        animation: bunnyBounce 2s ease-in-out infinite;
+        transform: translate(0, 0); /* gốc */
+      }
+
+      /* mobile */
+      @media (max-width: 480px) {
+        #decor-bunny {
+          width: 120px;
+          bottom: 0;
+          right: 0;
+        }
+      }
+
+      /* nhún nhẹ */
+      @keyframes bunnyBounce {
+        0%,
+        100% {
+          transform: translate(0, 0);
+        }
+        50% {
+          transform: translate(0, -8px);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="overlay" id="overlay">
+      <div class="overlay-content">
+        <p id="overlay-text">Thanh zy bấm vào đây nè 🎐</p>
+        <button id="letgo-btn">Let Go!</button>
+        <div class="countdown" id="countdown" style="display: none">3</div>
+      </div>
+    </div>
+
+    <div class="scene">
+      <div class="moon"></div>
+      <div class="lantern-container" id="lantern-container"></div>
+    </div>
+
+    <div id="modal-dim" class="modal-dim"></div>
+
+    <div class="popup" id="popup">
+      <div class="popup-content">
+        <h2>Lời chúc Trung Thu 🎐</h2>
+        <p id="popup-text"></p>
+        <button onclick="closePopup()">Đóng</button>
+      </div>
+    </div>
+
+    <div class="popup image-popup" id="image-popup">
+      <div class="popup-content">
+        <img id="popup-image" src="" alt="Hình Trung Thu" />
+        <button onclick="closeImagePopup()">Đóng</button>
+      </div>
+    </div>
+
+    <audio id="bg-music">
+      <source src="./lunar.mp3" type="audio/mpeg" />
+    </audio>
+
+    <script>
+      const lanternContainer = document.getElementById("lantern-container");
+      const popup = document.getElementById("popup");
+      const popupText = document.getElementById("popup-text");
+      const imagePopup = document.getElementById("image-popup");
+      const popupImage = document.getElementById("popup-image");
+      const modalDim = document.getElementById("modal-dim");
+
+      // canvas ẩn để kiểm tra pixel
+      const hitCanvas = document.createElement("canvas");
+      const hitCtx = hitCanvas.getContext("2d");
+
+      // xác định mobile
+      const isMobile = window.innerWidth <= 480;
+
+      // tạo stars
+      for (let i = 0; i < (isMobile ? 25 : 100); i++) {
+        const star = document.createElement("div");
+        star.className = "star";
+        const size = Math.random() * 2 + 1;
+        star.style.width = size + "px";
+        star.style.height = size + "px";
+        star.style.top = Math.random() * 100 + "%";
+        star.style.left = Math.random() * 100 + "%";
+        star.style.animationDelay = Math.random() * 2 + "s";
+        document.body.appendChild(star);
+      }
+
+      const messages = [
+        "Chúc Thanh Zy trung Thu thật xinh đẹp 🌕✨",
+        "Mong những điều bình an sẽ bên Thanh Zy 🌸",
+        "Chúc Thanh Zy trung Thu ngọt ngào 🍬",
+        "Chúc Thanh Zy trung thu chỉ toàn hạnh phúc 🕊️",
+        "Trăng rằm soi sáng, niềm vui ngập tràn 🌝",
+        "Chúc Thanh Zy mọi điều tốt đẹp 🎉",
+        "Hy vọng Trung Thu này mang đến cho Thanh Zy thật nhiều nụ cười ✨",
+      ];
+
+      const sampleImages = [
+        "./1.jpg",
+        "./2.png",
+        "./3.jpg",
+        "./4.jpg",
+        "./5.jpg",
+        "./6.jpg",
+      ];
+
+      const lanternCount = isMobile ? 20 : 100;
+      const baseRadius = isMobile ? 400 : 800;
+      const maxRadius = isMobile ? 600 : 1600;
+
+      // tạo lanterns
+      for (let i = 0; i < lanternCount; i++) {
+        const lanternImgAsset = new Image();
+        lanternImgAsset.onload = () => {
+          const wrapper = document.createElement("div");
+          wrapper.className = "lantern-wrapper";
+
+          const lantern = document.createElement("div");
+          lantern.className = "lantern";
+
+          const lanternImg = lanternImgAsset;
+          lantern.appendChild(lanternImg);
+
+          lantern.style.animationDuration = 12 + Math.random() * 10 + "s";
+          lantern.style.animationDelay = Math.random() * 5 + "s";
+
+          const angle = Math.random() * 2 * Math.PI;
+          const radius = baseRadius + Math.random() * (maxRadius - baseRadius);
+          const x = Math.cos(angle) * radius;
+          const z = Math.sin(angle) * radius;
+          const y = Math.random() * window.innerHeight;
+
+          wrapper.style.transform = `translate3d(${x}px, ${y}px, ${z}px)`;
+          wrapper.style.zIndex = Math.floor(z + maxRadius);
+
+          const scale = isMobile
+            ? 0.7 + Math.random() * 1
+            : 0.6 + Math.random() * 1.3;
+          lantern.style.transform = `scale(${scale})`;
+
+          lantern.dataset.message =
+            messages[Math.floor(Math.random() * messages.length)];
+
+          // hanger (dây + frame)
+          if (Math.random() < (isMobile ? 0.5 : 0.3)) {
+            const hanger = document.createElement("div");
+            hanger.className = "hanger";
+
+            const string = document.createElement("div");
+            string.className = "string";
+
+            const frame = document.createElement("div");
+            frame.className = "frame";
+
+            const img = document.createElement("img");
+            img.src =
+              sampleImages[Math.floor(Math.random() * sampleImages.length)];
+            frame.appendChild(img);
+
+            frame.addEventListener("click", (e) => {
+              e.stopPropagation();
+              popupImage.src = img.src;
+              imagePopup.classList.add("active");
+            });
+
+            hanger.appendChild(string);
+            hanger.appendChild(frame);
+            lantern.appendChild(hanger);
+
+            lantern.dataset.hasFrame = "true";
+          }
+
+          wrapper.appendChild(lantern);
+          lanternContainer.appendChild(wrapper);
+        };
+
+        lanternImgAsset.onerror = () => {
+          console.error("Lỗi: không tải được ảnh lồng đèn.");
+        };
+
+        lanternImgAsset.src = "./lunar.png";
+      }
+
+      // CLICK HANDLER với pixel-check
+      lanternContainer.addEventListener("click", (e) => {
+        const clientX = e.clientX,
+          clientY = e.clientY;
+        const topEl = document.elementFromPoint(clientX, clientY);
+        if (!topEl) return;
+
+        const imgEl =
+          topEl.tagName === "IMG" ? topEl : topEl.querySelector("img");
+        if (!imgEl) return;
+
+        if (!imgEl.complete || imgEl.naturalWidth === 0) return;
+
+        const rect = imgEl.getBoundingClientRect();
+        const clickX = clientX - rect.left;
+        const clickY = clientY - rect.top;
+
+        hitCanvas.width = Math.round(rect.width);
+        hitCanvas.height = Math.round(rect.height);
+        hitCtx.clearRect(0, 0, rect.width, rect.height);
+        hitCtx.drawImage(imgEl, 0, 0, rect.width, rect.height);
+
+        const pixel = hitCtx.getImageData(
+          Math.floor(clickX),
+          Math.floor(clickY),
+          1,
+          1
+        ).data;
+        if (pixel[3] < 20) return;
+
+        const clickedLantern = imgEl.closest(".lantern");
+        if (!clickedLantern || clickedLantern.dataset.hasFrame === "true")
+          return;
+
+        document.querySelectorAll(".lantern.selected").forEach((l) => {
+          l.classList.remove("selected");
+          l.style.animationPlayState = "running";
+        });
+
+        clickedLantern.classList.add("selected");
+        clickedLantern.style.animationPlayState = "paused";
+
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => {
+            const rect = imgEl.getBoundingClientRect();
+            const imgCenterX = rect.left + rect.width / 2;
+            const imgCenterY = rect.top + rect.height / 2;
+            const dx = imgCenterX - window.innerWidth / 2;
+            const dy = imgCenterY - window.innerHeight / 2;
+            const focusZ = -250;
+            lanternContainer.style.transform = `translate3d(${-dx}px, ${-dy}px, ${focusZ}px)`;
+            modalDim.classList.add("show");
+            setTimeout(() => {
+              popupText.textContent = clickedLantern.dataset.message;
+              popup.classList.add("active");
+            }, 350);
+          });
+        });
+      });
+
+      function closePopup() {
+        popup.classList.remove("active");
+        modalDim.classList.remove("show");
+        lanternContainer.style.transform = `translateZ(-800px)`;
+        document.querySelectorAll(".lantern").forEach((l) => {
+          l.classList.remove("selected");
+          l.style.animationPlayState = "running";
+        });
+      }
+
+      function closeImagePopup() {
+        imagePopup.classList.remove("active");
+      }
+
+      popup.addEventListener("click", (e) => {
+        if (e.target === popup) closePopup();
+      });
+      imagePopup.addEventListener("click", (e) => {
+        if (e.target === imagePopup) closeImagePopup();
+      });
+
+      // mở màn đếm ngược
+      const overlay = document.getElementById("overlay");
+      const letGoBtn = document.getElementById("letgo-btn");
+      const overlayText = document.getElementById("overlay-text");
+      const countdown = document.getElementById("countdown");
+      const bgMusic = document.getElementById("bg-music");
+
+      letGoBtn.addEventListener("click", () => {
+        letGoBtn.style.display = "none";
+        overlayText.style.display = "none";
+        countdown.style.display = "block";
+
+        let counter = 3;
+        countdown.textContent = counter;
+        const timer = setInterval(() => {
+          counter--;
+          if (counter > 0) {
+            countdown.textContent = counter;
+            countdown.style.animation = "none";
+            countdown.offsetHeight;
+            countdown.style.animation = null;
+          } else {
+            clearInterval(timer);
+            overlay.classList.add("hidden");
+            document.querySelector(".scene").classList.add("start");
+
+            bgMusic
+              .play()
+              .then(() => {
+                document.querySelectorAll(".lantern").forEach((lantern) => {
+                  lantern.style.animationPlayState = "running";
+                  lantern.addEventListener("animationend", () => {
+                    lantern.style.opacity = 0;
+                    lantern.style.animationPlayState = "paused";
+                    if (lantern.parentElement) lantern.parentElement.remove();
+                  });
+                });
+
+                setTimeout(() => {
+                  const endOverlay = document.createElement("div");
+                  Object.assign(endOverlay.style, {
+                    position: "fixed",
+                    inset: 0,
+                    background: "rgba(0,0,0,0.9)",
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    color: "white",
+                    fontSize: window.innerWidth <= 480 ? "20px" : "32px", // responsive
+                    textAlign: "center",
+                    padding: "20px",
+                    gap: "12px",
+                    opacity: 0, // để fade-in
+                    transition: "opacity 0.8s ease",
+                    zIndex: 30000,
+                  });
+
+                  endOverlay.innerHTML = `
+  <div>🎐 Hết rồi nè 🎉</div>
+  <div style="margin-top: 12px; font-size: 20px; color: #00f0ff; text-shadow: 0 0 8px #00bfff; line-height: 1.6; max-width: 80vw;">
+     🌕 Trong ngày Trung Thu,chúc Thanh Zy luôn ngập tràn niềm vui, 
+    một ngày trung thu ngập tràn hạnh phúc.Mong mọi khoảnh khắc của Thanh zy đều tươi đẹp như ánh trăng rằm, 
+    ngọt ngào như bánh Trung Thu, và đầy ắp những nụ cười rạng rỡ! 
+    Chúc Thanh Zy Trung Thu thật ý nghĩa và đáng nhớ. 🥮✨
+  </div>
+  <div style="margin-top: 20px; color: #00f0ff;">Nhớ vô game nhận quà nha 🎁</div>
+`;
+
+                  document.body.appendChild(endOverlay);
+
+                  // fade-in
+                  requestAnimationFrame(() => {
+                    endOverlay.style.opacity = 1;
+                  });
+
+                  // Xóa toàn bộ lồng đèn còn lại
+                  document
+                    .querySelectorAll(".lantern-wrapper")
+                    .forEach((el) => el.remove());
+                }, 80 * 1000);
+              })
+              .catch(() => {});
+          }
+        }, 1000);
+      });
+    </script>
+
+    <img id="decor-bunny" src="./tho1.png" alt="Thỏ Trung Thu" />
+  </body>
+</html>
